@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css" />
+    <title>Markdown Previewer</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone@7.10.3/babel.min.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js" crossorigin></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <div id="content"></div>
+
+    <script type="text/babel" data-presets="react,stage-3">
+      const Main = () => {
+        const [markdownContent, setMarkdownContent] = React.useState(
+          `# Welcome to Markdown Previewer 🙂\n- Write anything you want at the **left side**\n- See the result at the _right side_.\n\nHave fun! ✨`
+        )
+
+        React.useEffect(() => {
+          document.getElementById('preview').innerHTML = marked.parse(markdownContent)
+        })
+
+        function handleChange(e) {
+          setMarkdownContent(e.target.value)
+          document.getElementById('preview').innerHTML = marked.parse(e.target.value)
+          console.log(marked.parse(e.target.value))
+        }
+
+        return (
+          <div id='main'>
+            <h1 className='title'>🐟 Welcome to Markdown Previewer 🐟</h1>
+
+            <div className='main-container'>
+              <Editor content={markdownContent} onChange={handleChange} />
+              <Previewer />
+            </div>
+          </div>
+        )
+      }
+
+      const Editor = ({content, onChange}) => {
+        return (
+          <div className='container'>
+            <h2 className='sub-title'>🖋 Editor</h2>
+            <textarea id='editor' value={content} onChange={event => onChange(event)}></textarea>
+          </div>
+        )
+      }
+
+      const Previewer = () => {
+        return (
+          <div className='container'>
+            <h2 className='sub-title'>📄 Previewer</h2>
+            <div id='preview'></div>
+          </div>
+        )
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"))
+      root.render(<Main />);
+    </script>
+
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+  </body>
+</html>
